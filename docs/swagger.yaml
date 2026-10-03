@@ -1,0 +1,1860 @@
+basePath: /api/v1
+definitions:
+  models.APIResponse:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  models.HeartbeatResponse:
+    properties:
+      down_count:
+        type: integer
+      duration:
+        type: integer
+      end_time:
+        type: string
+      id:
+        type: integer
+      important:
+        type: boolean
+      monitor_id:
+        type: integer
+      msg:
+        type: string
+      ping:
+        type: integer
+      response:
+        type: string
+      retries:
+        type: integer
+      status:
+        type: integer
+      time:
+        type: string
+    type: object
+  models.MaintenanceCreateRequest:
+    properties:
+      active:
+        type: boolean
+      cron:
+        type: string
+      days_of_month:
+        type: string
+      description:
+        type: string
+      duration:
+        type: integer
+      end_date:
+        type: string
+      end_time:
+        type: string
+      interval_day:
+        type: integer
+      start_date:
+        type: string
+      start_time:
+        type: string
+      strategy:
+        type: string
+      timezone:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+      weekdays:
+        type: string
+    required:
+    - description
+    - strategy
+    - title
+    type: object
+  models.MaintenanceResponse:
+    properties:
+      active:
+        type: boolean
+      cron:
+        type: string
+      days_of_month:
+        type: string
+      description:
+        type: string
+      duration:
+        type: integer
+      end_date:
+        type: string
+      end_time:
+        type: string
+      id:
+        type: integer
+      interval_day:
+        type: integer
+      last_start_date:
+        type: string
+      start_date:
+        type: string
+      start_time:
+        type: string
+      strategy:
+        type: string
+      timezone:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+      weekdays:
+        type: string
+    type: object
+  models.MaintenanceUpdateRequest:
+    properties:
+      active:
+        type: boolean
+      cron:
+        type: string
+      days_of_month:
+        type: string
+      description:
+        type: string
+      duration:
+        type: integer
+      end_date:
+        type: string
+      end_time:
+        type: string
+      interval_day:
+        type: integer
+      start_date:
+        type: string
+      start_time:
+        type: string
+      strategy:
+        type: string
+      timezone:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+      weekdays:
+        type: string
+    type: object
+  models.MonitorCreateRequest:
+    properties:
+      accepted_statuscodes:
+        items:
+          type: string
+        type: array
+      active:
+        type: boolean
+      auth_domain:
+        type: string
+      auth_method:
+        type: string
+      auth_workstation:
+        type: string
+      basic_auth_pass:
+        type: string
+      basic_auth_user:
+        type: string
+      bearer_token:
+        type: string
+      body:
+        type: string
+      cache_bust:
+        type: boolean
+      conditions:
+        type: string
+      database_connection_string:
+        type: string
+      database_query:
+        type: string
+      description:
+        type: string
+      dns_resolve_server:
+        type: string
+      dns_resolve_type:
+        type: string
+      docker_container:
+        type: string
+      docker_host:
+        type: integer
+      domain_expiry_notification:
+        type: boolean
+      expected_tls_alert:
+        type: string
+      expected_value:
+        type: string
+      expiry_notification:
+        type: boolean
+      game:
+        type: string
+      gamedig_given_port_only:
+        type: boolean
+      gamedig_token:
+        type: string
+      grpc_body:
+        type: string
+      grpc_enable_tls:
+        type: boolean
+      grpc_metadata:
+        type: string
+      grpc_method:
+        type: string
+      grpc_protobuf:
+        type: string
+      grpc_service_name:
+        type: string
+      grpc_url:
+        type: string
+      headers:
+        type: string
+      hostname:
+        type: string
+      http_body_encoding:
+        type: string
+      ignore_tls:
+        type: boolean
+      interval:
+        minimum: 20
+        type: integer
+      invert_keyword:
+        type: boolean
+      ip_family:
+        type: string
+      json_path:
+        type: string
+      json_path_operator:
+        type: string
+      kafka_producer_allow_auto_topic_creation:
+        type: boolean
+      kafka_producer_brokers:
+        type: string
+      kafka_producer_message:
+        type: string
+      kafka_producer_sasl_options:
+        type: string
+      kafka_producer_ssl:
+        type: boolean
+      kafka_producer_topic:
+        type: string
+      keyword:
+        type: string
+      location:
+        type: string
+      manual_status:
+        type: integer
+      maxredirects:
+        minimum: 0
+        type: integer
+      maxretries:
+        minimum: 0
+        type: integer
+      method:
+        type: string
+      mqtt_check_type:
+        type: string
+      mqtt_password:
+        type: string
+      mqtt_success_message:
+        type: string
+      mqtt_topic:
+        type: string
+      mqtt_username:
+        type: string
+      mqtt_websocket_path:
+        type: string
+      name:
+        type: string
+      ntp_root_dispersion_threshold:
+        type: integer
+      ntp_stratum_threshold:
+        type: integer
+      ntp_time_offset_threshold:
+        type: integer
+      oauth_audience:
+        type: string
+      oauth_auth_method:
+        type: string
+      oauth_client_id:
+        type: string
+      oauth_client_secret:
+        type: string
+      oauth_scopes:
+        type: string
+      oauth_token_url:
+        type: string
+      packet_size:
+        type: integer
+      parent:
+        type: integer
+      ping_count:
+        type: integer
+      ping_numeric:
+        type: boolean
+      ping_per_request_timeout:
+        type: integer
+      port:
+        maximum: 65535
+        minimum: 0
+        type: integer
+      protocol:
+        type: string
+      proxy_id:
+        type: integer
+      push_token:
+        type: string
+      rabbitmq_nodes:
+        type: string
+      rabbitmq_password:
+        type: string
+      rabbitmq_username:
+        type: string
+      radius_called_station_id:
+        type: string
+      radius_calling_station_id:
+        type: string
+      radius_password:
+        type: string
+      radius_secret:
+        type: string
+      radius_username:
+        type: string
+      remote_browser:
+        type: integer
+      resend_interval:
+        type: integer
+      response_max_length:
+        type: integer
+      retry_interval:
+        minimum: 20
+        type: integer
+      retry_only_on_status_code_failure:
+        type: boolean
+      save_error_response:
+        type: boolean
+      save_response:
+        type: boolean
+      screenshot_delay:
+        type: integer
+      sftp_path:
+        type: string
+      smtp_security:
+        type: string
+      snmp_oid:
+        type: string
+      snmp_v3_username:
+        type: string
+      snmp_version:
+        type: string
+      ssh_auth_method:
+        type: string
+      ssh_passphrase:
+        type: string
+      ssh_password:
+        type: string
+      ssh_private_key:
+        type: string
+      ssh_username:
+        type: string
+      subtype:
+        type: string
+      system_service_name:
+        type: string
+      timeout:
+        type: number
+      tls_ca:
+        type: string
+      tls_cert:
+        type: string
+      tls_key:
+        type: string
+      type:
+        type: string
+      upside_down:
+        type: boolean
+      url:
+        type: string
+      weight:
+        type: integer
+      ws_ignore_sec_websocket_accept_header:
+        type: boolean
+      ws_subprotocol:
+        type: string
+    required:
+    - interval
+    - name
+    - type
+    type: object
+  models.MonitorMaintenanceCreateRequest:
+    properties:
+      maintenance_id:
+        type: integer
+      monitor_id:
+        type: integer
+    required:
+    - maintenance_id
+    - monitor_id
+    type: object
+  models.MonitorMaintenanceResponse:
+    properties:
+      id:
+        type: integer
+      maintenance_id:
+        type: integer
+      monitor_id:
+        type: integer
+    type: object
+  models.MonitorResponse:
+    properties:
+      accepted_statuscodes_json:
+        type: string
+      active:
+        type: boolean
+      auth_domain:
+        type: string
+      auth_method:
+        type: string
+      auth_workstation:
+        type: string
+      basic_auth_pass:
+        type: string
+      basic_auth_user:
+        type: string
+      bearer_token:
+        type: string
+      body:
+        type: string
+      cache_bust:
+        type: boolean
+      conditions:
+        type: string
+      created_date:
+        type: string
+      database_connection_string:
+        type: string
+      database_query:
+        type: string
+      description:
+        type: string
+      dns_last_result:
+        type: string
+      dns_resolve_server:
+        type: string
+      dns_resolve_type:
+        type: string
+      docker_container:
+        type: string
+      docker_host:
+        type: integer
+      domain_expiry_notification:
+        type: boolean
+      expected_tls_alert:
+        type: string
+      expected_value:
+        type: string
+      expiry_notification:
+        type: boolean
+      game:
+        type: string
+      gamedig_given_port_only:
+        type: boolean
+      gamedig_token:
+        type: string
+      grpc_body:
+        type: string
+      grpc_enable_tls:
+        type: boolean
+      grpc_metadata:
+        type: string
+      grpc_method:
+        type: string
+      grpc_protobuf:
+        type: string
+      grpc_service_name:
+        type: string
+      grpc_url:
+        type: string
+      headers:
+        type: string
+      hostname:
+        type: string
+      http_body_encoding:
+        type: string
+      id:
+        type: integer
+      ignore_tls:
+        type: boolean
+      interval:
+        type: integer
+      invert_keyword:
+        type: boolean
+      ip_family:
+        type: string
+      json_path:
+        type: string
+      json_path_operator:
+        type: string
+      kafka_producer_allow_auto_topic_creation:
+        type: boolean
+      kafka_producer_brokers:
+        type: string
+      kafka_producer_message:
+        type: string
+      kafka_producer_sasl_options:
+        type: string
+      kafka_producer_ssl:
+        type: boolean
+      kafka_producer_topic:
+        type: string
+      keyword:
+        type: string
+      location:
+        type: string
+      manual_status:
+        type: integer
+      maxredirects:
+        type: integer
+      maxretries:
+        type: integer
+      method:
+        type: string
+      mqtt_check_type:
+        type: string
+      mqtt_password:
+        type: string
+      mqtt_success_message:
+        type: string
+      mqtt_topic:
+        type: string
+      mqtt_username:
+        type: string
+      mqtt_websocket_path:
+        type: string
+      name:
+        type: string
+      ntp_root_dispersion_threshold:
+        type: integer
+      ntp_stratum_threshold:
+        type: integer
+      ntp_time_offset_threshold:
+        type: integer
+      oauth_audience:
+        type: string
+      oauth_auth_method:
+        type: string
+      oauth_client_id:
+        type: string
+      oauth_client_secret:
+        type: string
+      oauth_scopes:
+        type: string
+      oauth_token_url:
+        type: string
+      packet_size:
+        type: integer
+      parent:
+        type: integer
+      ping_count:
+        type: integer
+      ping_numeric:
+        type: boolean
+      ping_per_request_timeout:
+        type: integer
+      port:
+        type: integer
+      protocol:
+        type: string
+      proxy_id:
+        type: integer
+      push_token:
+        type: string
+      rabbitmq_nodes:
+        type: string
+      rabbitmq_password:
+        type: string
+      rabbitmq_username:
+        type: string
+      radius_called_station_id:
+        type: string
+      radius_calling_station_id:
+        type: string
+      radius_password:
+        type: string
+      radius_secret:
+        type: string
+      radius_username:
+        type: string
+      remote_browser:
+        type: integer
+      resend_interval:
+        type: integer
+      response_max_length:
+        type: integer
+      retry_interval:
+        type: integer
+      retry_only_on_status_code_failure:
+        type: boolean
+      save_error_response:
+        type: boolean
+      save_response:
+        type: boolean
+      screenshot_delay:
+        type: integer
+      sftp_path:
+        type: string
+      smtp_security:
+        type: string
+      snmp_oid:
+        type: string
+      snmp_v3_username:
+        type: string
+      snmp_version:
+        type: string
+      ssh_auth_method:
+        type: string
+      ssh_passphrase:
+        type: string
+      ssh_password:
+        type: string
+      ssh_private_key:
+        type: string
+      ssh_username:
+        type: string
+      subtype:
+        type: string
+      system_service_name:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/models.MonitorTagResponse'
+        type: array
+      timeout:
+        type: number
+      tls_ca:
+        type: string
+      tls_cert:
+        type: string
+      tls_key:
+        type: string
+      type:
+        type: string
+      upside_down:
+        type: boolean
+      url:
+        type: string
+      user_id:
+        type: integer
+      weight:
+        type: integer
+      ws_ignore_sec_websocket_accept_header:
+        type: boolean
+      ws_subprotocol:
+        type: string
+    type: object
+  models.MonitorTagCreateRequest:
+    properties:
+      monitor_id:
+        type: integer
+      tag_id:
+        type: integer
+      value:
+        type: string
+    required:
+    - monitor_id
+    - tag_id
+    type: object
+  models.MonitorTagResponse:
+    properties:
+      id:
+        type: integer
+      monitor_id:
+        type: integer
+      tag:
+        $ref: '#/definitions/models.TagResponse'
+      tag_id:
+        type: integer
+      value:
+        type: string
+    type: object
+  models.MonitorUpdateRequest:
+    properties:
+      accepted_statuscodes:
+        items:
+          type: string
+        type: array
+      active:
+        type: boolean
+      auth_domain:
+        type: string
+      auth_method:
+        type: string
+      auth_workstation:
+        type: string
+      basic_auth_pass:
+        type: string
+      basic_auth_user:
+        type: string
+      bearer_token:
+        type: string
+      body:
+        type: string
+      cache_bust:
+        type: boolean
+      conditions:
+        type: string
+      database_connection_string:
+        type: string
+      database_query:
+        type: string
+      description:
+        type: string
+      dns_resolve_server:
+        type: string
+      dns_resolve_type:
+        type: string
+      docker_container:
+        type: string
+      docker_host:
+        type: integer
+      domain_expiry_notification:
+        type: boolean
+      expected_tls_alert:
+        type: string
+      expected_value:
+        type: string
+      expiry_notification:
+        type: boolean
+      game:
+        type: string
+      gamedig_given_port_only:
+        type: boolean
+      gamedig_token:
+        type: string
+      grpc_body:
+        type: string
+      grpc_enable_tls:
+        type: boolean
+      grpc_metadata:
+        type: string
+      grpc_method:
+        type: string
+      grpc_protobuf:
+        type: string
+      grpc_service_name:
+        type: string
+      grpc_url:
+        type: string
+      headers:
+        type: string
+      hostname:
+        type: string
+      http_body_encoding:
+        type: string
+      ignore_tls:
+        type: boolean
+      interval:
+        minimum: 20
+        type: integer
+      invert_keyword:
+        type: boolean
+      ip_family:
+        type: string
+      json_path:
+        type: string
+      json_path_operator:
+        type: string
+      kafka_producer_allow_auto_topic_creation:
+        type: boolean
+      kafka_producer_brokers:
+        type: string
+      kafka_producer_message:
+        type: string
+      kafka_producer_sasl_options:
+        type: string
+      kafka_producer_ssl:
+        type: boolean
+      kafka_producer_topic:
+        type: string
+      keyword:
+        type: string
+      location:
+        type: string
+      manual_status:
+        type: integer
+      maxredirects:
+        minimum: 0
+        type: integer
+      maxretries:
+        minimum: 0
+        type: integer
+      method:
+        type: string
+      mqtt_check_type:
+        type: string
+      mqtt_password:
+        type: string
+      mqtt_success_message:
+        type: string
+      mqtt_topic:
+        type: string
+      mqtt_username:
+        type: string
+      mqtt_websocket_path:
+        type: string
+      name:
+        type: string
+      ntp_root_dispersion_threshold:
+        type: integer
+      ntp_stratum_threshold:
+        type: integer
+      ntp_time_offset_threshold:
+        type: integer
+      oauth_audience:
+        type: string
+      oauth_auth_method:
+        type: string
+      oauth_client_id:
+        type: string
+      oauth_client_secret:
+        type: string
+      oauth_scopes:
+        type: string
+      oauth_token_url:
+        type: string
+      packet_size:
+        type: integer
+      parent:
+        type: integer
+      ping_count:
+        type: integer
+      ping_numeric:
+        type: boolean
+      ping_per_request_timeout:
+        type: integer
+      port:
+        maximum: 65535
+        minimum: 0
+        type: integer
+      protocol:
+        type: string
+      proxy_id:
+        type: integer
+      push_token:
+        type: string
+      rabbitmq_nodes:
+        type: string
+      rabbitmq_password:
+        type: string
+      rabbitmq_username:
+        type: string
+      radius_called_station_id:
+        type: string
+      radius_calling_station_id:
+        type: string
+      radius_password:
+        type: string
+      radius_secret:
+        type: string
+      radius_username:
+        type: string
+      remote_browser:
+        type: integer
+      resend_interval:
+        type: integer
+      response_max_length:
+        type: integer
+      retry_interval:
+        minimum: 20
+        type: integer
+      retry_only_on_status_code_failure:
+        type: boolean
+      save_error_response:
+        type: boolean
+      save_response:
+        type: boolean
+      screenshot_delay:
+        type: integer
+      sftp_path:
+        type: string
+      smtp_security:
+        type: string
+      snmp_oid:
+        type: string
+      snmp_v3_username:
+        type: string
+      snmp_version:
+        type: string
+      ssh_auth_method:
+        type: string
+      ssh_passphrase:
+        type: string
+      ssh_password:
+        type: string
+      ssh_private_key:
+        type: string
+      ssh_username:
+        type: string
+      subtype:
+        type: string
+      system_service_name:
+        type: string
+      timeout:
+        type: number
+      tls_ca:
+        type: string
+      tls_cert:
+        type: string
+      tls_key:
+        type: string
+      type:
+        type: string
+      upside_down:
+        type: boolean
+      url:
+        type: string
+      weight:
+        type: integer
+      ws_ignore_sec_websocket_accept_header:
+        type: boolean
+      ws_subprotocol:
+        type: string
+    type: object
+  models.PaginatedResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.MonitorResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      success:
+        type: boolean
+      total:
+        type: integer
+    type: object
+  models.TagCreateRequest:
+    properties:
+      color:
+        type: string
+      name:
+        type: string
+    required:
+    - color
+    - name
+    type: object
+  models.TagResponse:
+    properties:
+      color:
+        type: string
+      created_date:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.TagUpdateRequest:
+    properties:
+      color:
+        type: string
+      name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A Go REST API for managing Uptime Kuma monitors with MariaDB/MySQL
+    backend
+  title: Uptime Kuma Monitor API
+  version: "1.0"
+paths:
+  /maintenances:
+    get:
+      description: Get a paginated list of maintenances
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PaginatedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: List all maintenances
+      tags:
+      - maintenances
+    post:
+      consumes:
+      - application/json
+      description: Create a new maintenance window
+      parameters:
+      - description: Maintenance data
+        in: body
+        name: maintenance
+        required: true
+        schema:
+          $ref: '#/definitions/models.MaintenanceCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new maintenance
+      tags:
+      - maintenances
+  /maintenances/{id}:
+    delete:
+      description: Delete a maintenance by its ID
+      parameters:
+      - description: Maintenance ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a maintenance
+      tags:
+      - maintenances
+    get:
+      description: Get a specific maintenance by its ID
+      parameters:
+      - description: Maintenance ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a maintenance by ID
+      tags:
+      - maintenances
+    put:
+      consumes:
+      - application/json
+      description: Update an existing maintenance
+      parameters:
+      - description: Maintenance ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Maintenance data
+        in: body
+        name: maintenance
+        required: true
+        schema:
+          $ref: '#/definitions/models.MaintenanceUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a maintenance
+      tags:
+      - maintenances
+  /monitors:
+    get:
+      description: Get a paginated list of Uptime Kuma monitors
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PaginatedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: List all monitors
+      tags:
+      - monitors
+    post:
+      consumes:
+      - application/json
+      description: Create a new Uptime Kuma monitor
+      parameters:
+      - description: Monitor data
+        in: body
+        name: monitor
+        required: true
+        schema:
+          $ref: '#/definitions/models.MonitorCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MonitorResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new monitor
+      tags:
+      - monitors
+  /monitors/{id}:
+    delete:
+      description: Delete a Uptime Kuma monitor by its ID
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a monitor
+      tags:
+      - monitors
+    get:
+      description: Get a specific Uptime Kuma monitor by its ID
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MonitorResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a monitor by ID
+      tags:
+      - monitors
+    put:
+      consumes:
+      - application/json
+      description: Update an existing Uptime Kuma monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Monitor data
+        in: body
+        name: monitor
+        required: true
+        schema:
+          $ref: '#/definitions/models.MonitorUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MonitorResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a monitor
+      tags:
+      - monitors
+  /monitors/{id}/heartbeat:
+    get:
+      description: Get the last heartbeat status for a specific monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.HeartbeatResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get monitor's last heartbeat
+      tags:
+      - monitors
+  /monitors/{id}/maintenances:
+    get:
+      description: Get all maintenances for a specific monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.MonitorMaintenanceResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get monitor maintenances
+      tags:
+      - monitor-maintenances
+    post:
+      consumes:
+      - application/json
+      description: Associate a maintenance window with a monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Monitor maintenance data
+        in: body
+        name: maintenance
+        required: true
+        schema:
+          $ref: '#/definitions/models.MonitorMaintenanceCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MonitorMaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Add maintenance to monitor
+      tags:
+      - monitor-maintenances
+  /monitors/{id}/maintenances/{maintenanceId}:
+    delete:
+      description: Remove a maintenance association from a monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Maintenance ID
+        in: path
+        name: maintenanceId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove maintenance from monitor
+      tags:
+      - monitor-maintenances
+  /monitors/{id}/pause:
+    post:
+      description: Pause (deactivate) a Uptime Kuma monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MonitorResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Pause a monitor
+      tags:
+      - monitors
+  /monitors/{id}/resume:
+    post:
+      description: Resume (activate) a Uptime Kuma monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MonitorResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Resume a monitor
+      tags:
+      - monitors
+  /monitors/{id}/tags:
+    get:
+      description: Get all tags for a specific monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.MonitorTagResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get monitor tags
+      tags:
+      - monitor-tags
+    post:
+      consumes:
+      - application/json
+      description: Add a tag to a monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Monitor tag data
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.MonitorTagCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.MonitorTagResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Add tag to monitor
+      tags:
+      - monitor-tags
+  /monitors/{id}/tags/{tagId}:
+    delete:
+      description: Remove a tag from a monitor
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Tag ID
+        in: path
+        name: tagId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove tag from monitor
+      tags:
+      - monitor-tags
+  /tags:
+    get:
+      description: Get all tags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.TagResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: List all tags
+      tags:
+      - tags
+    post:
+      consumes:
+      - application/json
+      description: Create a new tag
+      parameters:
+      - description: Tag data
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.TagCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.TagResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new tag
+      tags:
+      - tags
+  /tags/{id}:
+    delete:
+      description: Delete a tag by its ID
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a tag
+      tags:
+      - tags
+    get:
+      description: Get a specific tag by its ID
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.TagResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a tag by ID
+      tags:
+      - tags
+    put:
+      consumes:
+      - application/json
+      description: Update an existing tag
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Tag data
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.TagUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.TagResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a tag
+      tags:
+      - tags
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and the token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,50 @@
+# Git
+.git
+.gitignore
+
+# Go
+go.exe
+uptime-kuma-api
+uptime-kuma-api.exe
+
+# Build output
+*.exe
+*.test
+*.out
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Documentation
+README.md
+docs/
+!docs/docs.go
+!docs/swagger.json
+!docs/swagger.yaml
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Logs
+*.log
+
+# Test coverage
+*.coverprofile
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+tmp/
+temp/
