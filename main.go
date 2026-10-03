@@ -76,6 +76,7 @@ func main() {
 			monitors.POST("/:id/pause", monitorHandler.PauseMonitor)
 			monitors.POST("/:id/resume", monitorHandler.ResumeMonitor)
 			monitors.GET("/:id/heartbeat", heartbeatHandler.GetMonitorLastHeartbeat)
+			monitors.GET("/:id/heartbeats", heartbeatHandler.GetMonitorHeartbeats)
 			monitors.POST("/:id/tags", monitorTagHandler.AddMonitorTag)
 			monitors.GET("/:id/tags", monitorTagHandler.GetMonitorTags)
 			monitors.DELETE("/:id/tags/:tagId", monitorTagHandler.DeleteMonitorTag)

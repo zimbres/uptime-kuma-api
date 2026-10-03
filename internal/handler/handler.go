@@ -1132,6 +1132,74 @@ func (h *HeartbeatHandler) GetMonitorLastHeartbeat(c *gin.Context) {
 	})
 }
 
+// GetMonitorHeartbeats godoc
+// @Summary Get monitor's heartbeats
+// @Description Get all heartbeats for a specific monitor with pagination
+// @Tags monitors
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Monitor ID"
+// @Param page query int false "Page number" default(1)
+// @Param limit query int false "Items per page" default(10)
+// @Success 200 {object} models.PaginatedResponse
+// @Failure 400 {object} models.APIResponse
+// @Failure 404 {object} models.APIResponse
+// @Router /monitors/{id}/heartbeats [get]
+func (h *HeartbeatHandler) GetMonitorHeartbeats(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.APIResponse{
+			Success: false,
+			Error:   "Invalid monitor ID",
+		})
+		return
+	}
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 || limit > 100 {
+		limit = 10
+	}
+
+	heartbeats, err := h.repo.GetByMonitorID(uint(id), limit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch heartbeats: " + err.Error(),
+		})
+		return
+	}
+
+	// Apply pagination manually since repo returns all
+	start := (page - 1) * limit
+	end := start + limit
+	if start >= len(heartbeats) {
+		heartbeats = []models.Heartbeat{}
+	} else {
+		if end > len(heartbeats) {
+			end = len(heartbeats)
+		}
+		heartbeats = heartbeats[start:end]
+	}
+
+	var responses []models.HeartbeatResponse
+	for _, hb := range heartbeats {
+		responses = append(responses, *h.heartbeatToResponse(&hb))
+	}
+
+	c.JSON(http.StatusOK, models.PaginatedResponse{
+		Success: true,
+		Data:    responses,
+		Total:   int64(len(heartbeats)),
+		Page:    page,
+		Limit:   limit,
+	})
+}
+
 func (h *HeartbeatHandler) heartbeatToResponse(hb *models.Heartbeat) *models.HeartbeatResponse {
 	var endTime *string
 	if hb.EndTime != nil {

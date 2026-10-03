@@ -8,6 +8,7 @@ A Go REST API for managing Uptime Kuma monitors with MariaDB/MySQL backend.
 
 - Full CRUD operations for monitors
 - Get monitor last heartbeat status
+- Get monitor heartbeats with pagination
 - Monitor tags management (CRUD + associate/dissociate)
 - Maintenance windows management (CRUD + associate/dissociate)
 - Pause/Resume monitors
@@ -117,6 +118,7 @@ All endpoints are prefixed with `/api/v1`
 | POST | /monitors/:id/pause | Pause (deactivate) a monitor |
 | POST | /monitors/:id/resume | Resume (activate) a monitor |
 | GET | /monitors/:id/heartbeat | Get monitor's last heartbeat |
+| GET | /monitors/:id/heartbeats | Get monitor's heartbeats (paginated) |
 | POST | /monitors/:id/tags | Add tag to monitor |
 | GET | /monitors/:id/tags | Get monitor's tags |
 | DELETE | /monitors/:id/tags/:tagId | Remove tag from monitor |
@@ -227,6 +229,12 @@ curl -X POST http://localhost:8080/api/v1/monitors/1/resume
 
 ```bash
 curl http://localhost:8080/api/v1/monitors/1/heartbeat
+```
+
+### Get Monitor Heartbeats (paginated)
+
+```bash
+curl http://localhost:8080/api/v1/monitors/1/heartbeats?page=1&limit=10
 ```
 
 ### Add Tag to Monitor

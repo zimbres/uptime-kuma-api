@@ -385,6 +385,34 @@ func TestHeartbeatHandler_GetMonitorLastHeartbeat(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
+func TestHeartbeatHandler_GetMonitorHeartbeats(t *testing.T) {
+	mockRepo := new(MockHeartbeatRepository)
+	handler := NewHeartbeatHandler(mockRepo)
+
+	heartbeats := []models.Heartbeat{
+		{ID: 1, MonitorID: 1, Status: 0, Msg: stringPtr("OK")},
+		{ID: 2, MonitorID: 1, Status: 0, Msg: stringPtr("OK")},
+		{ID: 3, MonitorID: 1, Status: 1, Msg: stringPtr("Failed")},
+	}
+	mockRepo.On("GetByMonitorID", uint(1), 10).Return(heartbeats, nil)
+
+	router := setupRouter()
+	router.GET("/api/v1/monitors/:id/heartbeats", handler.GetMonitorHeartbeats)
+
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/monitors/1/heartbeats?page=1&limit=10", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp models.PaginatedResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	assert.True(t, resp.Success)
+	assert.Len(t, resp.Data, 3)
+	assert.Equal(t, int64(3), resp.Total)
+	mockRepo.AssertExpectations(t)
+}
+
 func TestTagHandler_CreateTag(t *testing.T) {
 	mockRepo := new(MockTagRepository)
 	handler := NewTagHandler(mockRepo)

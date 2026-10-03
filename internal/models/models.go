@@ -502,11 +502,11 @@ type APIResponse struct {
 }
 
 type PaginatedResponse struct {
-	Success bool           `json:"success"`
-	Data    []MonitorResponse `json:"data"`
-	Total   int64          `json:"total"`
-	Page    int            `json:"page"`
-	Limit   int            `json:"limit"`
+	Success bool        `json:"success"`
+	Data    interface{} `json:"data"`
+	Total   int64       `json:"total"`
+	Page    int         `json:"page"`
+	Limit   int         `json:"limit"`
 }
 
 type Heartbeat struct {

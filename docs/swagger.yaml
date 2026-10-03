@@ -927,10 +927,7 @@ definitions:
     type: object
   models.PaginatedResponse:
     properties:
-      data:
-        items:
-          $ref: '#/definitions/models.MonitorResponse'
-        type: array
+      data: {}
       limit:
         type: integer
       page:
@@ -1362,6 +1359,45 @@ paths:
       security:
       - BearerAuth: []
       summary: Get monitor's last heartbeat
+      tags:
+      - monitors
+  /monitors/{id}/heartbeats:
+    get:
+      description: Get all heartbeats for a specific monitor with pagination
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PaginatedResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get monitor's heartbeats
       tags:
       - monitors
   /monitors/{id}/maintenances:
