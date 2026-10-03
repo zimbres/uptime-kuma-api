@@ -491,7 +491,7 @@ type MonitorResponse struct {
 	SSHPrivateKey              *string `json:"ssh_private_key"`
 	SSHPassphrase              *string `json:"ssh_passphrase"`
 	SSHAuthMethod              string                  `json:"ssh_auth_method"`
-	Tags                       []MonitorTagResponse    `json:"tags,omitempty"`
+	Tags                       []MonitorTagResponse    `json:"tags"`
 }
 
 type APIResponse struct {
