@@ -48,3 +48,6 @@ Thumbs.db
 # Temp
 tmp/
 temp/
+
+# DB
+mariadb.sql
