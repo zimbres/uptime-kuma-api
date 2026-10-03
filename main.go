@@ -37,6 +37,9 @@ func main() {
 	heartbeatRepo := repository.NewHeartbeatRepository(database.DB)
 	heartbeatHandler := handler.NewHeartbeatHandler(heartbeatRepo)
 
+	statsRepo := repository.NewStatsRepository(database.DB)
+	statsHandler := handler.NewStatsHandler(statsRepo)
+
 	tagRepo := repository.NewTagRepository(database.DB)
 	tagHandler := handler.NewTagHandler(tagRepo)
 
@@ -77,6 +80,7 @@ func main() {
 			monitors.POST("/:id/resume", monitorHandler.ResumeMonitor)
 			monitors.GET("/:id/heartbeat", heartbeatHandler.GetMonitorLastHeartbeat)
 			monitors.GET("/:id/heartbeats", heartbeatHandler.GetMonitorHeartbeats)
+			monitors.GET("/:id/stats", statsHandler.GetMonitorStats)
 			monitors.POST("/:id/tags", monitorTagHandler.AddMonitorTag)
 			monitors.GET("/:id/tags", monitorTagHandler.GetMonitorTags)
 			monitors.DELETE("/:id/tags/:tagId", monitorTagHandler.DeleteMonitorTag)

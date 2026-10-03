@@ -3,6 +3,7 @@ package repository
 import (
 	"encoding/json"
 	"errors"
+	"time"
 
 	"zimbres/uptime-kuma-api/internal/models"
 
@@ -56,6 +57,15 @@ type MonitorMaintenanceRepositoryInterface interface {
 	Create(mm *models.MonitorMaintenance) error
 	GetByMonitorID(monitorID uint) ([]models.MonitorMaintenance, error)
 	Delete(monitorID, maintenanceID uint) error
+}
+
+// StatsRepositoryInterface defines the interface for stats repository
+type StatsRepositoryInterface interface {
+	GetCurrentPing(monitorID uint) (*float64, error)
+	GetAvgPing24h(monitorID uint) (*float64, error)
+	GetUptime24h(monitorID uint) (*float64, error)
+	GetUptime30d(monitorID uint) (*float64, error)
+	GetUptime1y(monitorID uint) (*float64, error)
 }
 
 type MonitorRepository struct {
@@ -360,4 +370,106 @@ func (r *MonitorMaintenanceRepository) Delete(monitorID, maintenanceID uint) err
 		return errors.New("monitor maintenance not found")
 	}
 	return nil
+}
+
+type StatsRepository struct {
+	db *gorm.DB
+}
+
+func NewStatsRepository(db *gorm.DB) *StatsRepository {
+	return &StatsRepository{db: db}
+}
+
+// GetCurrentPing gets the current ping from the latest minutely stat
+func (r *StatsRepository) GetCurrentPing(monitorID uint) (*float64, error) {
+	var stat models.StatMinutely
+	err := r.db.Where("monitor_id = ?", monitorID).Order("timestamp DESC").First(&stat).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &stat.Ping, nil
+}
+
+// GetAvgPing24h gets average ping from last 24 hours of hourly stats
+func (r *StatsRepository) GetAvgPing24h(monitorID uint) (*float64, error) {
+	now := time.Now().Unix()
+	cutoff := now - 24*60*60 // 24 hours ago
+
+	var avgPing float64
+	err := r.db.Model(&models.StatHourly{}).
+		Where("monitor_id = ? AND timestamp >= ?", monitorID, cutoff).
+		Select("AVG(ping)").Scan(&avgPing).Error
+	if err != nil {
+		return nil, err
+	}
+	if avgPing == 0 {
+		return nil, nil
+	}
+	return &avgPing, nil
+}
+
+// GetUptime24h gets uptime percentage from last 24 hours of hourly stats
+func (r *StatsRepository) GetUptime24h(monitorID uint) (*float64, error) {
+	now := time.Now().Unix()
+	cutoff := now - 24*60*60 // 24 hours ago
+
+	var totalUp, totalDown int64
+	err := r.db.Model(&models.StatHourly{}).
+		Where("monitor_id = ? AND timestamp >= ?", monitorID, cutoff).
+		Select("SUM(up), SUM(down)").Row().Scan(&totalUp, &totalDown)
+	if err != nil {
+		return nil, err
+	}
+
+	if totalUp+totalDown == 0 {
+		return nil, nil
+	}
+
+	uptime := float64(totalUp) / float64(totalUp+totalDown) * 100
+	return &uptime, nil
+}
+
+// GetUptime30d gets uptime percentage from last 30 days of daily stats
+func (r *StatsRepository) GetUptime30d(monitorID uint) (*float64, error) {
+	now := time.Now().Unix()
+	cutoff := now - 30*24*60*60 // 30 days ago
+
+	var totalUp, totalDown int64
+	err := r.db.Model(&models.StatDaily{}).
+		Where("monitor_id = ? AND timestamp >= ?", monitorID, cutoff).
+		Select("SUM(up), SUM(down)").Row().Scan(&totalUp, &totalDown)
+	if err != nil {
+		return nil, err
+	}
+
+	if totalUp+totalDown == 0 {
+		return nil, nil
+	}
+
+	uptime := float64(totalUp) / float64(totalUp+totalDown) * 100
+	return &uptime, nil
+}
+
+// GetUptime1y gets uptime percentage from last 365 days of daily stats
+func (r *StatsRepository) GetUptime1y(monitorID uint) (*float64, error) {
+	now := time.Now().Unix()
+	cutoff := now - 365*24*60*60 // 365 days ago
+
+	var totalUp, totalDown int64
+	err := r.db.Model(&models.StatDaily{}).
+		Where("monitor_id = ? AND timestamp >= ?", monitorID, cutoff).
+		Select("SUM(up), SUM(down)").Row().Scan(&totalUp, &totalDown)
+	if err != nil {
+		return nil, err
+	}
+
+	if totalUp+totalDown == 0 {
+		return nil, nil
+	}
+
+	uptime := float64(totalUp) / float64(totalUp+totalDown) * 100
+	return &uptime, nil
 }

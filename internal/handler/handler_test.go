@@ -197,6 +197,53 @@ func (m *MockMonitorMaintenanceRepository) Delete(monitorID, maintenanceID uint)
 
 var _ repository.MonitorMaintenanceRepositoryInterface = (*MockMonitorMaintenanceRepository)(nil)
 
+// MockStatsRepository is a mock for StatsRepositoryInterface
+type MockStatsRepository struct {
+	mock.Mock
+}
+
+func (m *MockStatsRepository) GetCurrentPing(monitorID uint) (*float64, error) {
+	args := m.Called(monitorID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*float64), args.Error(1)
+}
+
+func (m *MockStatsRepository) GetAvgPing24h(monitorID uint) (*float64, error) {
+	args := m.Called(monitorID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*float64), args.Error(1)
+}
+
+func (m *MockStatsRepository) GetUptime24h(monitorID uint) (*float64, error) {
+	args := m.Called(monitorID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*float64), args.Error(1)
+}
+
+func (m *MockStatsRepository) GetUptime30d(monitorID uint) (*float64, error) {
+	args := m.Called(monitorID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*float64), args.Error(1)
+}
+
+func (m *MockStatsRepository) GetUptime1y(monitorID uint) (*float64, error) {
+	args := m.Called(monitorID)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*float64), args.Error(1)
+}
+
+var _ repository.StatsRepositoryInterface = (*MockStatsRepository)(nil)
+
 func setupRouter() *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	return gin.Default()
@@ -574,6 +621,80 @@ func TestMonitorMaintenanceHandler_AddMonitorMaintenance(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusCreated, w.Code)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestStatsHandler_GetMonitorStats(t *testing.T) {
+	mockRepo := new(MockStatsRepository)
+	handler := NewStatsHandler(mockRepo)
+
+	currentPing := 45.5
+	avgPing24h := 42.3
+	uptime24h := 99.5
+	uptime30d := 99.2
+	uptime1y := 98.8
+
+	mockRepo.On("GetCurrentPing", uint(1)).Return(&currentPing, nil)
+	mockRepo.On("GetAvgPing24h", uint(1)).Return(&avgPing24h, nil)
+	mockRepo.On("GetUptime24h", uint(1)).Return(&uptime24h, nil)
+	mockRepo.On("GetUptime30d", uint(1)).Return(&uptime30d, nil)
+	mockRepo.On("GetUptime1y", uint(1)).Return(&uptime1y, nil)
+
+	router := setupRouter()
+	router.GET("/api/v1/monitors/:id/stats", handler.GetMonitorStats)
+
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/monitors/1/stats", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp models.APIResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	assert.True(t, resp.Success)
+
+	statsData := resp.Data.(map[string]interface{})
+	assert.Equal(t, currentPing, statsData["current_ping"])
+	assert.Equal(t, avgPing24h, statsData["avg_ping_24h"])
+	assert.Equal(t, uptime24h, statsData["uptime_24h"])
+	assert.Equal(t, uptime30d, statsData["uptime_30d"])
+	assert.Equal(t, uptime1y, statsData["uptime_1y"])
+
+	mockRepo.AssertExpectations(t)
+}
+
+func TestStatsHandler_GetMonitorStats_PartialData(t *testing.T) {
+	mockRepo := new(MockStatsRepository)
+	handler := NewStatsHandler(mockRepo)
+
+	// Only return some stats, others nil
+	currentPing := 45.5
+	mockRepo.On("GetCurrentPing", uint(1)).Return(&currentPing, nil)
+	mockRepo.On("GetAvgPing24h", uint(1)).Return((*float64)(nil), nil)
+	mockRepo.On("GetUptime24h", uint(1)).Return((*float64)(nil), nil)
+	mockRepo.On("GetUptime30d", uint(1)).Return((*float64)(nil), nil)
+	mockRepo.On("GetUptime1y", uint(1)).Return((*float64)(nil), nil)
+
+	router := setupRouter()
+	router.GET("/api/v1/monitors/:id/stats", handler.GetMonitorStats)
+
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/monitors/1/stats", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp models.APIResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	assert.True(t, resp.Success)
+
+	statsData := resp.Data.(map[string]interface{})
+	assert.Equal(t, currentPing, statsData["current_ping"])
+	assert.Nil(t, statsData["avg_ping_24h"])
+	assert.Nil(t, statsData["uptime_24h"])
+	assert.Nil(t, statsData["uptime_30d"])
+	assert.Nil(t, statsData["uptime_1y"])
+
 	mockRepo.AssertExpectations(t)
 }
 

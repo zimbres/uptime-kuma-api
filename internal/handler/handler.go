@@ -1222,6 +1222,93 @@ func (h *HeartbeatHandler) heartbeatToResponse(hb *models.Heartbeat) *models.Hea
 	}
 }
 
+type StatsHandler struct {
+	repo repository.StatsRepositoryInterface
+}
+
+func NewStatsHandler(repo repository.StatsRepositoryInterface) *StatsHandler {
+	return &StatsHandler{repo: repo}
+}
+
+// GetMonitorStats godoc
+// @Summary Get monitor statistics
+// @Description Get monitor statistics including current ping, average ping 24h, and uptime percentages
+// @Tags monitors
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Monitor ID"
+// @Success 200 {object} models.APIResponse{data=models.MonitorStatsResponse}
+// @Failure 400 {object} models.APIResponse
+// @Failure 404 {object} models.APIResponse
+// @Router /monitors/{id}/stats [get]
+func (h *StatsHandler) GetMonitorStats(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.APIResponse{
+			Success: false,
+			Error:   "Invalid monitor ID",
+		})
+		return
+	}
+
+	stats := models.MonitorStatsResponse{}
+
+	currentPing, err := h.repo.GetCurrentPing(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch current ping: " + err.Error(),
+		})
+		return
+	}
+	stats.CurrentPing = currentPing
+
+	avgPing24h, err := h.repo.GetAvgPing24h(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch avg ping 24h: " + err.Error(),
+		})
+		return
+	}
+	stats.AvgPing24h = avgPing24h
+
+	uptime24h, err := h.repo.GetUptime24h(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch uptime 24h: " + err.Error(),
+		})
+		return
+	}
+	stats.Uptime24h = uptime24h
+
+	uptime30d, err := h.repo.GetUptime30d(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch uptime 30d: " + err.Error(),
+		})
+		return
+	}
+	stats.Uptime30d = uptime30d
+
+	uptime1y, err := h.repo.GetUptime1y(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch uptime 1y: " + err.Error(),
+		})
+		return
+	}
+	stats.Uptime1y = uptime1y
+
+	c.JSON(http.StatusOK, models.APIResponse{
+		Success: true,
+		Data:    stats,
+	})
+}
+
 type TagHandler struct {
 	repo     repository.TagRepositoryInterface
 	validate *validator.Validate

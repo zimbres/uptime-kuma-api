@@ -9,6 +9,7 @@ A Go REST API for managing Uptime Kuma monitors with MariaDB/MySQL backend.
 - Full CRUD operations for monitors
 - Get monitor last heartbeat status
 - Get monitor heartbeats with pagination
+- Get monitor statistics (current ping, avg ping 24h, uptime %)
 - Monitor tags management (CRUD + associate/dissociate)
 - Maintenance windows management (CRUD + associate/dissociate)
 - Pause/Resume monitors
@@ -119,6 +120,7 @@ All endpoints are prefixed with `/api/v1`
 | POST | /monitors/:id/resume | Resume (activate) a monitor |
 | GET | /monitors/:id/heartbeat | Get monitor's last heartbeat |
 | GET | /monitors/:id/heartbeats | Get monitor's heartbeats (paginated) |
+| GET | /monitors/:id/stats | Get monitor statistics (ping, uptime) |
 | POST | /monitors/:id/tags | Add tag to monitor |
 | GET | /monitors/:id/tags | Get monitor's tags |
 | DELETE | /monitors/:id/tags/:tagId | Remove tag from monitor |
@@ -235,6 +237,26 @@ curl http://localhost:8080/api/v1/monitors/1/heartbeat
 
 ```bash
 curl http://localhost:8080/api/v1/monitors/1/heartbeats?page=1&limit=10
+```
+
+### Get Monitor Statistics
+
+```bash
+curl http://localhost:8080/api/v1/monitors/1/stats
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "current_ping": 45.5,
+    "avg_ping_24h": 42.3,
+    "uptime_24h": 99.5,
+    "uptime_30d": 99.2,
+    "uptime_1y": 98.8
+  }
+}
 ```
 
 ### Add Tag to Monitor

@@ -1035,6 +1035,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/monitors/{id}/stats": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get monitor statistics including current ping, average ping 24h, and uptime percentages",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "monitors"
+                ],
+                "summary": "Get monitor statistics",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Monitor ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.MonitorStatsResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/monitors/{id}/tags": {
             "get": {
                 "security": [
@@ -2501,6 +2559,26 @@ const docTemplate = `{
                 },
                 "ws_subprotocol": {
                     "type": "string"
+                }
+            }
+        },
+        "models.MonitorStatsResponse": {
+            "type": "object",
+            "properties": {
+                "avg_ping_24h": {
+                    "type": "number"
+                },
+                "current_ping": {
+                    "type": "number"
+                },
+                "uptime_1y": {
+                    "type": "number"
+                },
+                "uptime_24h": {
+                    "type": "number"
+                },
+                "uptime_30d": {
+                    "type": "number"
                 }
             }
         },

@@ -696,3 +696,59 @@ type MonitorMaintenanceCreateRequest struct {
 	MonitorID     uint `json:"monitor_id" validate:"required"`
 	MaintenanceID uint `json:"maintenance_id" validate:"required"`
 }
+
+type StatMinutely struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	MonitorID uint      `json:"monitor_id"`
+	Timestamp int64     `json:"timestamp"`
+	Ping      float64   `json:"ping"`
+	Up        int       `json:"up"`
+	Down      int       `json:"down"`
+	PingMin   float64   `json:"ping_min"`
+	PingMax   float64   `json:"ping_max"`
+	Extras    *string   `json:"extras"`
+}
+
+func (StatMinutely) TableName() string {
+	return "stat_minutely"
+}
+
+type StatHourly struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	MonitorID uint      `json:"monitor_id"`
+	Timestamp int64     `json:"timestamp"`
+	Ping      float64   `json:"ping"`
+	PingMin   float64   `json:"ping_min"`
+	PingMax   float64   `json:"ping_max"`
+	Up        int       `json:"up"`
+	Down      int       `json:"down"`
+	Extras    *string   `json:"extras"`
+}
+
+func (StatHourly) TableName() string {
+	return "stat_hourly"
+}
+
+type StatDaily struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	MonitorID uint      `json:"monitor_id"`
+	Timestamp int64     `json:"timestamp"`
+	Ping      float64   `json:"ping"`
+	Up        int       `json:"up"`
+	Down      int       `json:"down"`
+	PingMin   float64   `json:"ping_min"`
+	PingMax   float64   `json:"ping_max"`
+	Extras    *string   `json:"extras"`
+}
+
+func (StatDaily) TableName() string {
+	return "stat_daily"
+}
+
+type MonitorStatsResponse struct {
+	CurrentPing      *float64 `json:"current_ping"`
+	AvgPing24h       *float64 `json:"avg_ping_24h"`
+	Uptime24h        *float64 `json:"uptime_24h"`
+	Uptime30d        *float64 `json:"uptime_30d"`
+	Uptime1y         *float64 `json:"uptime_1y"`
+}
