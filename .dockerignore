@@ -19,6 +19,7 @@ uptime-kuma-api.exe
 *.swo
 
 # Documentation
+example.json
 README.md
 docs/
 !docs/docs.go

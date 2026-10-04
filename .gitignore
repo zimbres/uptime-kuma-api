@@ -1,4 +1,5 @@
 .env
+example.json
 go.exe
 uptime-kuma-api
 uptime-kuma-api.exe
