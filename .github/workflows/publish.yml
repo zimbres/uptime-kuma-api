@@ -85,7 +85,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            youruser/${{ github.event.repository.name }}
+            zimbres/${{ github.event.repository.name }}
           flavor: |
             latest=true
           tags: |
