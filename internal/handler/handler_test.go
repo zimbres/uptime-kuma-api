@@ -53,6 +53,11 @@ func (m *MockMonitorRepository) Exists(id uint) (bool, error) {
 	return args.Bool(0), args.Error(1)
 }
 
+func (m *MockMonitorRepository) HasActiveMaintenance(monitorID uint) (bool, error) {
+	args := m.Called(monitorID)
+	return args.Bool(0), args.Error(1)
+}
+
 var _ repository.MonitorRepositoryInterface = (*MockMonitorRepository)(nil)
 
 // MockHeartbeatRepository is a mock for HeartbeatRepositoryInterface
@@ -290,6 +295,8 @@ func TestMonitorHandler_GetMonitors(t *testing.T) {
 		{ID: 2, Name: stringPtr("Monitor 2"), Active: true},
 	}
 	mockRepo.On("GetAll", 1, 10).Return(monitors, int64(2), nil)
+	mockRepo.On("HasActiveMaintenance", uint(1)).Return(false, nil)
+	mockRepo.On("HasActiveMaintenance", uint(2)).Return(false, nil)
 
 	router := setupRouter()
 	router.GET("/api/v1/monitors", handler.GetMonitors)
@@ -314,6 +321,7 @@ func TestMonitorHandler_GetMonitor(t *testing.T) {
 
 	monitor := &models.Monitor{ID: 1, Name: stringPtr("Test Monitor"), Active: true}
 	mockRepo.On("GetByID", uint(1)).Return(monitor, nil)
+	mockRepo.On("HasActiveMaintenance", uint(1)).Return(false, nil)
 
 	router := setupRouter()
 	router.GET("/api/v1/monitors/:id", handler.GetMonitor)
@@ -340,6 +348,7 @@ func TestMonitorHandler_UpdateMonitor(t *testing.T) {
 
 	updatedMonitor := &models.Monitor{ID: 1, Name: stringPtr("Updated Monitor"), Active: true}
 	mockRepo.On("GetByID", uint(1)).Return(updatedMonitor, nil)
+	mockRepo.On("HasActiveMaintenance", uint(1)).Return(false, nil)
 
 	router := setupRouter()
 	router.PUT("/api/v1/monitors/:id", handler.UpdateMonitor)
@@ -385,6 +394,7 @@ func TestMonitorHandler_PauseMonitor(t *testing.T) {
 	mockRepo.On("GetByID", uint(1)).Return(monitor, nil)
 	mockRepo.On("Update", uint(1), mock.Anything).Return(nil)
 	mockRepo.On("GetByID", uint(1)).Return(&models.Monitor{ID: 1, Name: stringPtr("Test"), Active: false}, nil)
+	mockRepo.On("HasActiveMaintenance", uint(1)).Return(false, nil).Twice()
 
 	router := setupRouter()
 	router.POST("/api/v1/monitors/:id/pause", handler.PauseMonitor)
@@ -405,6 +415,7 @@ func TestMonitorHandler_ResumeMonitor(t *testing.T) {
 	mockRepo.On("GetByID", uint(1)).Return(monitor, nil)
 	mockRepo.On("Update", uint(1), mock.Anything).Return(nil)
 	mockRepo.On("GetByID", uint(1)).Return(&models.Monitor{ID: 1, Name: stringPtr("Test"), Active: true}, nil)
+	mockRepo.On("HasActiveMaintenance", uint(1)).Return(false, nil).Twice()
 
 	router := setupRouter()
 	router.POST("/api/v1/monitors/:id/resume", handler.ResumeMonitor)

@@ -956,6 +956,10 @@ func (h *MonitorHandler) updateRequestToMap(req *models.MonitorUpdateRequest) ma
 }
 
 func (h *MonitorHandler) monitorToResponse(m *models.Monitor) *models.MonitorResponse {
+	hasMaintenance := false
+	if h.repo != nil {
+		hasMaintenance, _ = h.repo.HasActiveMaintenance(m.ID)
+	}
 	return &models.MonitorResponse{
 		ID:                         m.ID,
 		Name:                       m.Name,
@@ -1078,6 +1082,7 @@ func (h *MonitorHandler) monitorToResponse(m *models.Monitor) *models.MonitorRes
 		SSHPassphrase:              m.SSHPassphrase,
 		SSHAuthMethod:              m.SSHAuthMethod,
 		Tags:                       h.monitorTagsToResponse(m.Tags),
+		Maintenance:                hasMaintenance,
 	}
 }
 

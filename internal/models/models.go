@@ -492,6 +492,7 @@ type MonitorResponse struct {
 	SSHPassphrase              *string `json:"ssh_passphrase"`
 	SSHAuthMethod              string                  `json:"ssh_auth_method"`
 	Tags                       []MonitorTagResponse    `json:"tags"`
+	Maintenance                bool                    `json:"maintenance"`
 }
 
 type APIResponse struct {

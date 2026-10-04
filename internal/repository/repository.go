@@ -18,6 +18,7 @@ type MonitorRepositoryInterface interface {
 	Update(id uint, updates map[string]interface{}) error
 	Delete(id uint) error
 	Exists(id uint) (bool, error)
+	HasActiveMaintenance(monitorID uint) (bool, error)
 }
 
 // HeartbeatRepositoryInterface defines the interface for heartbeat repository
@@ -165,6 +166,17 @@ func (r *MonitorRepository) Delete(id uint) error {
 func (r *MonitorRepository) Exists(id uint) (bool, error) {
 	var count int64
 	err := r.db.Model(&models.Monitor{}).Where("id = ?", id).Count(&count).Error
+	return count > 0, err
+}
+
+func (r *MonitorRepository) HasActiveMaintenance(monitorID uint) (bool, error) {
+	var count int64
+	now := time.Now()
+	err := r.db.Table("monitor_maintenance mm").
+		Joins("JOIN maintenance m ON m.id = mm.maintenance_id").
+		Where("mm.monitor_id = ? AND m.active = ?", monitorID, true).
+		Where("(m.strategy = 'single' AND m.start_date <= ? AND (m.end_date IS NULL OR m.end_date >= ?)) OR m.strategy != 'single'", now, now).
+		Count(&count).Error
 	return count > 0, err
 }
 
