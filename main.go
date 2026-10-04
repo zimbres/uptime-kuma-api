@@ -17,6 +17,7 @@ import (
 	"zimbres/uptime-kuma-api/internal/handler"
 	"zimbres/uptime-kuma-api/internal/middleware"
 	"zimbres/uptime-kuma-api/internal/repository"
+	"zimbres/uptime-kuma-api/internal/version"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -26,7 +27,7 @@ import (
 )
 
 func main() {
-	cfg := config.LoadConfig()
+	cfg := config.LoadConfig(version.Version)
 
 	database.InitDB(cfg)
 	defer database.CloseDB()
@@ -109,6 +110,7 @@ func main() {
 	}
 
 	port := cfg.ServerPort
+	log.Printf("Starting Uptime Kuma API version %s", cfg.Version)
 	log.Printf("Server starting on port %s", port)
 	log.Printf("Swagger UI available at http://localhost:%s/swagger/index.html", port)
 

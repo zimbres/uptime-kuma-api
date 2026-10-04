@@ -16,9 +16,10 @@ type Config struct {
 	ServerPort string
 	AuthToken  string
 	EnableAuth bool
+	Version    string
 }
 
-func LoadConfig() *Config {
+func LoadConfig(version string) *Config {
 	godotenv.Load()
 
 	dbPort, _ := strconv.Atoi(getEnv("DB_PORT", "3306"))
@@ -32,6 +33,7 @@ func LoadConfig() *Config {
 		ServerPort: getEnv("SERVER_PORT", "8080"),
 		AuthToken:  getEnv("AUTH_TOKEN", ""),
 		EnableAuth: getEnv("ENABLE_AUTH", "false") == "true",
+		Version:    version,
 	}
 }
 
