@@ -26,7 +26,7 @@ type Monitor struct {
 	DNSResolveServer           *string        `json:"dns_resolve_server"`
 	DNSLastResult              *string        `json:"dns_last_result"`
 	RetryInterval              int            `gorm:"default:0" json:"retry_interval"`
-	PushToken                  *string        `json:"push_token"`
+	PushToken                  *string        `json:"pushToken"`
 	Method                     string         `gorm:"default:'GET'" json:"method"`
 	Body                       *string        `json:"body"`
 	Headers                    *string        `json:"headers"`
@@ -150,7 +150,7 @@ type MonitorCreateRequest struct {
 	DNSResolveType             *string `json:"dns_resolve_type"`
 	DNSResolveServer           *string `json:"dns_resolve_server"`
 	RetryInterval              *int    `json:"retry_interval" validate:"min=20"`
-	PushToken                  *string `json:"push_token"`
+	PushToken                  *string `json:"pushToken"`
 	Method                     *string `json:"method"`
 	Body                       *string `json:"body"`
 	Headers                    *string `json:"headers"`
@@ -269,7 +269,7 @@ type MonitorUpdateRequest struct {
 	DNSResolveType             *string `json:"dns_resolve_type"`
 	DNSResolveServer           *string `json:"dns_resolve_server"`
 	RetryInterval              *int    `json:"retry_interval" validate:"omitempty,min=20"`
-	PushToken                  *string `json:"push_token"`
+	PushToken                  *string `json:"pushToken"`
 	Method                     *string `json:"method"`
 	Body                       *string `json:"body"`
 	Headers                    *string `json:"headers"`
@@ -392,7 +392,7 @@ type MonitorResponse struct {
 	DNSResolveServer           *string `json:"dns_resolve_server"`
 	DNSLastResult              *string `json:"dns_last_result"`
 	RetryInterval              int     `json:"retry_interval"`
-	PushToken                  *string `json:"push_token"`
+	PushToken                  *string `json:"pushToken"`
 	Method                     string  `json:"method"`
 	Body                       *string `json:"body"`
 	Headers                    *string `json:"headers"`
