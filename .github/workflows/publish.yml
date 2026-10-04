@@ -54,7 +54,7 @@ jobs:
             -o "${release_name}/${bin}" .
 
           # include docs/config examples in the archive
-          cp README.md License example.json .env.example "$release_name"/ 2>/dev/null || true
+          cp README.md License .env.example "$release_name"/ 2>/dev/null || true
 
           if [ "${{ matrix.goos }}" == "windows" ]; then
             7z a -tzip "${release_name}.zip" "./${release_name}/*"
