@@ -1,8 +1,7 @@
 services:
   api:
-    # build: .
-    image: zimbres/uptime-kuma-api
-    # container_name: uptime-kuma-api
+    build: .
+    container_name: uptime-kuma-api
     ports:
       - "8080:8080"
     environment:
