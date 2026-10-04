@@ -170,14 +170,162 @@ func (r *MonitorRepository) Exists(id uint) (bool, error) {
 }
 
 func (r *MonitorRepository) HasActiveMaintenance(monitorID uint) (bool, error) {
-	var count int64
-	now := time.Now()
-	err := r.db.Table("monitor_maintenance mm").
-		Joins("JOIN maintenance m ON m.id = mm.maintenance_id").
+	var maintenances []models.Maintenance
+	err := r.db.Table("maintenance m").
+		Joins("JOIN monitor_maintenance mm ON mm.maintenance_id = m.id").
 		Where("mm.monitor_id = ? AND m.active = ?", monitorID, true).
-		Where("(m.strategy = 'single' AND m.start_date <= ? AND (m.end_date IS NULL OR m.end_date >= ?)) OR m.strategy != 'single'", now, now).
-		Count(&count).Error
-	return count > 0, err
+		Find(&maintenances).Error
+	if err != nil {
+		return false, err
+	}
+
+	now := time.Now()
+	for _, m := range maintenances {
+		if r.isMaintenanceActiveNow(&m, now) {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func (r *MonitorRepository) isMaintenanceActiveNow(m *models.Maintenance, now time.Time) bool {
+	if !m.Active {
+		return false
+	}
+
+	loc := time.UTC
+	if m.Timezone != nil && *m.Timezone != "" {
+		if l, err := time.LoadLocation(*m.Timezone); err == nil {
+			loc = l
+		}
+	}
+	localNow := now.In(loc)
+
+	switch m.Strategy {
+	case "single":
+		return r.isSingleMaintenanceActive(m, localNow)
+	default:
+		return r.isRecurringMaintenanceActive(m, localNow)
+	}
+}
+
+func (r *MonitorRepository) isSingleMaintenanceActive(m *models.Maintenance, now time.Time) bool {
+	if m.StartDate != nil {
+		start := time.Date(m.StartDate.Year(), m.StartDate.Month(), m.StartDate.Day(), 0, 0, 0, 0, now.Location())
+		if m.StartTime != nil {
+			if t, err := time.Parse("15:04:05", *m.StartTime); err == nil {
+				start = time.Date(m.StartDate.Year(), m.StartDate.Month(), m.StartDate.Day(), t.Hour(), t.Minute(), t.Second(), 0, now.Location())
+			}
+		}
+		if now.Before(start) {
+			return false
+		}
+	}
+
+	if m.EndDate != nil {
+		end := time.Date(m.EndDate.Year(), m.EndDate.Month(), m.EndDate.Day(), 23, 59, 59, 0, now.Location())
+		if m.EndTime != nil {
+			if t, err := time.Parse("15:04:05", *m.EndTime); err == nil {
+				end = time.Date(m.EndDate.Year(), m.EndDate.Month(), m.EndDate.Day(), t.Hour(), t.Minute(), t.Second(), 0, now.Location())
+			}
+		}
+		if now.After(end) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (r *MonitorRepository) isRecurringMaintenanceActive(m *models.Maintenance, now time.Time) bool {
+	if m.StartDate != nil {
+		start := time.Date(m.StartDate.Year(), m.StartDate.Month(), m.StartDate.Day(), 0, 0, 0, 0, now.Location())
+		if m.StartTime != nil {
+			if t, err := time.Parse("15:04:05", *m.StartTime); err == nil {
+				start = time.Date(m.StartDate.Year(), m.StartDate.Month(), m.StartDate.Day(), t.Hour(), t.Minute(), t.Second(), 0, now.Location())
+			}
+		}
+		if now.Before(start) {
+			return false
+		}
+	}
+
+	if m.EndDate != nil {
+		end := time.Date(m.EndDate.Year(), m.EndDate.Month(), m.EndDate.Day(), 23, 59, 59, 0, now.Location())
+		if m.EndTime != nil {
+			if t, err := time.Parse("15:04:05", *m.EndTime); err == nil {
+				end = time.Date(m.EndDate.Year(), m.EndDate.Month(), m.EndDate.Day(), t.Hour(), t.Minute(), t.Second(), 0, now.Location())
+			}
+		}
+		if now.After(end) {
+			return false
+		}
+	}
+
+	if m.StartTime != nil || m.EndTime != nil {
+		if m.StartTime == nil || m.EndTime == nil {
+			return false
+		}
+		startTime, _ := time.Parse("15:04:05", *m.StartTime)
+		endTime, _ := time.Parse("15:04:05", *m.EndTime)
+		todayStart := time.Date(now.Year(), now.Month(), now.Day(), startTime.Hour(), startTime.Minute(), startTime.Second(), 0, now.Location())
+		todayEnd := time.Date(now.Year(), now.Month(), now.Day(), endTime.Hour(), endTime.Minute(), endTime.Second(), 0, now.Location())
+		if now.Before(todayStart) || now.After(todayEnd) {
+			return false
+		}
+	}
+
+	if m.Weekdays != "" && m.Weekdays != "[]" {
+		var weekdays []int
+		if err := json.Unmarshal([]byte(m.Weekdays), &weekdays); err == nil && len(weekdays) > 0 {
+			weekday := int(now.Weekday())
+			if weekday == 0 {
+				weekday = 7
+			}
+			found := false
+			for _, w := range weekdays {
+				if w == weekday {
+					found = true
+					break
+				}
+			}
+			if !found {
+				return false
+			}
+		}
+	}
+
+	if m.DaysOfMonth != "" && m.DaysOfMonth != "[]" {
+		var days []int
+		if err := json.Unmarshal([]byte(m.DaysOfMonth), &days); err == nil && len(days) > 0 {
+			found := false
+			for _, d := range days {
+				if d == now.Day() {
+					found = true
+					break
+				}
+			}
+			if !found {
+				return false
+			}
+		}
+	}
+
+	if m.IntervalDay != nil && *m.IntervalDay > 0 {
+		if m.StartDate == nil {
+			return false
+		}
+		daysDiff := int(now.Sub(*m.StartDate).Hours() / 24)
+		if daysDiff%*m.IntervalDay != 0 {
+			return false
+		}
+	}
+
+	if m.Cron != nil && *m.Cron != "" {
+		return false
+	}
+
+	return true
 }
 
 type HeartbeatRepository struct {
