@@ -32,7 +32,7 @@ func TestMonitorResponse_TagsWithData(t *testing.T) {
 		ID:   1,
 		Name: stringPtr("Test"),
 		Tags: []MonitorTagResponse{
-			{ID: 1, MonitorID: 1, TagID: 1, Value: stringPtr("prod")},
+			{MonitorID: 1, TagID: 1, Value: stringPtr("prod")},
 		},
 	}
 	assert.Len(t, resp.Tags, 1)

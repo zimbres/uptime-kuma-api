@@ -32,16 +32,16 @@ func main() {
 	defer database.CloseDB()
 
 	monitorRepo := repository.NewMonitorRepository(database.DB)
-	monitorHandler := handler.NewMonitorHandler(monitorRepo)
+
+	tagRepo := repository.NewTagRepository(database.DB)
+	monitorHandler := handler.NewMonitorHandler(monitorRepo, tagRepo)
+	tagHandler := handler.NewTagHandler(tagRepo)
 
 	heartbeatRepo := repository.NewHeartbeatRepository(database.DB)
 	heartbeatHandler := handler.NewHeartbeatHandler(heartbeatRepo)
 
 	statsRepo := repository.NewStatsRepository(database.DB)
 	statsHandler := handler.NewStatsHandler(statsRepo)
-
-	tagRepo := repository.NewTagRepository(database.DB)
-	tagHandler := handler.NewTagHandler(tagRepo)
 
 	monitorTagRepo := repository.NewMonitorTagRepository(database.DB)
 	monitorTagHandler := handler.NewMonitorTagHandler(monitorTagRepo)

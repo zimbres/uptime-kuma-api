@@ -14,14 +14,16 @@ import (
 )
 
 type MonitorHandler struct {
-	repo     repository.MonitorRepositoryInterface
-	validate *validator.Validate
+	repo      repository.MonitorRepositoryInterface
+	tagRepo   repository.TagRepositoryInterface
+	validate  *validator.Validate
 }
 
-func NewMonitorHandler(repo repository.MonitorRepositoryInterface) *MonitorHandler {
+func NewMonitorHandler(repo repository.MonitorRepositoryInterface, tagRepo repository.TagRepositoryInterface) *MonitorHandler {
 	return &MonitorHandler{
-		repo:     repo,
-		validate: validator.New(),
+		repo:      repo,
+		tagRepo:   tagRepo,
+		validate:  validator.New(),
 	}
 }
 
@@ -1712,7 +1714,6 @@ func (h *MonitorTagHandler) DeleteMonitorTag(c *gin.Context) {
 
 func (h *MonitorTagHandler) monitorTagToResponse(mt *models.MonitorTag) *models.MonitorTagResponse {
 	return &models.MonitorTagResponse{
-		ID:        mt.ID,
 		MonitorID: mt.MonitorID,
 		TagID:     mt.TagID,
 		Value:     mt.Value,
@@ -1725,11 +1726,21 @@ func (h *MonitorHandler) monitorTagsToResponse(tags []models.MonitorTag) []model
 	}
 	responses := make([]models.MonitorTagResponse, len(tags))
 	for i, t := range tags {
+		name := ""
+		color := ""
+		if h.tagRepo != nil {
+			tag, err := h.tagRepo.GetByID(t.TagID)
+			if err == nil && tag != nil {
+				name = tag.Name
+				color = tag.Color
+			}
+		}
 		responses[i] = models.MonitorTagResponse{
-			ID:        t.ID,
 			MonitorID: t.MonitorID,
 			TagID:     t.TagID,
 			Value:     t.Value,
+			Name:      name,
+			Color:     color,
 		}
 	}
 	return responses

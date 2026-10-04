@@ -251,7 +251,8 @@ func setupRouter() *gin.Engine {
 
 func TestMonitorHandler_CreateMonitor(t *testing.T) {
 	mockRepo := new(MockMonitorRepository)
-	handler := NewMonitorHandler(mockRepo)
+	mockTagRepo := new(MockTagRepository)
+	handler := NewMonitorHandler(mockRepo, mockTagRepo)
 
 	reqBody := models.MonitorCreateRequest{
 		Name:     stringPtr("Test Monitor"),
@@ -281,7 +282,8 @@ func TestMonitorHandler_CreateMonitor(t *testing.T) {
 
 func TestMonitorHandler_GetMonitors(t *testing.T) {
 	mockRepo := new(MockMonitorRepository)
-	handler := NewMonitorHandler(mockRepo)
+	mockTagRepo := new(MockTagRepository)
+	handler := NewMonitorHandler(mockRepo, mockTagRepo)
 
 	monitors := []models.Monitor{
 		{ID: 1, Name: stringPtr("Monitor 1"), Active: true},
@@ -307,7 +309,8 @@ func TestMonitorHandler_GetMonitors(t *testing.T) {
 
 func TestMonitorHandler_GetMonitor(t *testing.T) {
 	mockRepo := new(MockMonitorRepository)
-	handler := NewMonitorHandler(mockRepo)
+	mockTagRepo := new(MockTagRepository)
+	handler := NewMonitorHandler(mockRepo, mockTagRepo)
 
 	monitor := &models.Monitor{ID: 1, Name: stringPtr("Test Monitor"), Active: true}
 	mockRepo.On("GetByID", uint(1)).Return(monitor, nil)
@@ -329,7 +332,8 @@ func TestMonitorHandler_GetMonitor(t *testing.T) {
 
 func TestMonitorHandler_UpdateMonitor(t *testing.T) {
 	mockRepo := new(MockMonitorRepository)
-	handler := NewMonitorHandler(mockRepo)
+	mockTagRepo := new(MockTagRepository)
+	handler := NewMonitorHandler(mockRepo, mockTagRepo)
 
 	mockRepo.On("Exists", uint(1)).Return(true, nil)
 	mockRepo.On("Update", uint(1), mock.Anything).Return(nil)
@@ -355,7 +359,8 @@ func TestMonitorHandler_UpdateMonitor(t *testing.T) {
 
 func TestMonitorHandler_DeleteMonitor(t *testing.T) {
 	mockRepo := new(MockMonitorRepository)
-	handler := NewMonitorHandler(mockRepo)
+	mockTagRepo := new(MockTagRepository)
+	handler := NewMonitorHandler(mockRepo, mockTagRepo)
 
 	mockRepo.On("Exists", uint(1)).Return(true, nil)
 	mockRepo.On("Delete", uint(1)).Return(nil)
@@ -373,7 +378,8 @@ func TestMonitorHandler_DeleteMonitor(t *testing.T) {
 
 func TestMonitorHandler_PauseMonitor(t *testing.T) {
 	mockRepo := new(MockMonitorRepository)
-	handler := NewMonitorHandler(mockRepo)
+	mockTagRepo := new(MockTagRepository)
+	handler := NewMonitorHandler(mockRepo, mockTagRepo)
 
 	monitor := &models.Monitor{ID: 1, Name: stringPtr("Test"), Active: true}
 	mockRepo.On("GetByID", uint(1)).Return(monitor, nil)
@@ -392,7 +398,8 @@ func TestMonitorHandler_PauseMonitor(t *testing.T) {
 
 func TestMonitorHandler_ResumeMonitor(t *testing.T) {
 	mockRepo := new(MockMonitorRepository)
-	handler := NewMonitorHandler(mockRepo)
+	mockTagRepo := new(MockTagRepository)
+	handler := NewMonitorHandler(mockRepo, mockTagRepo)
 
 	monitor := &models.Monitor{ID: 1, Name: stringPtr("Test"), Active: false}
 	mockRepo.On("GetByID", uint(1)).Return(monitor, nil)

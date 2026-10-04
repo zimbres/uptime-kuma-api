@@ -583,11 +583,11 @@ func (MonitorTag) TableName() string {
 }
 
 type MonitorTagResponse struct {
-	ID        uint    `json:"id"`
 	MonitorID uint    `json:"monitor_id"`
 	TagID     uint    `json:"tag_id"`
 	Value     *string `json:"value"`
-	Tag       *TagResponse `json:"tag,omitempty"`
+	Name      string  `json:"name"`
+	Color     string  `json:"color"`
 }
 
 type MonitorTagCreateRequest struct {
